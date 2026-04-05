@@ -1,6 +1,5 @@
 # KredIT - Club Credit & Contribution Tracking System
 
-Kumaraguru College of Technology, Coimbatore
 
 ## Overview
 
