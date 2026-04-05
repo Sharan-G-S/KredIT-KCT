@@ -24,6 +24,16 @@ function formatHours(hours) {
   return m > 0 ? h + 'h ' + m + 'm' : h + 'h';
 }
 
+function formatTime(timeStr) {
+  if (!timeStr) return '--:--';
+  if (timeStr.indexOf(':') !== -1) return timeStr;
+  // Handle cases like "0900" -> "09:00"
+  var t = timeStr.replace(/\D/g, '');
+  if (t.length === 4) return t.substring(0, 2) + ':' + t.substring(2);
+  if (t.length === 3) return '0' + t.substring(0, 1) + ':' + t.substring(1);
+  return timeStr;
+}
+
 function showToast(message, type) {
   type = type || 'info';
   var container = document.querySelector('.toast-container');

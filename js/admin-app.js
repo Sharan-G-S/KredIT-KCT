@@ -111,10 +111,15 @@ function renderReviewQueue() {
         '<div class="student-meta">' + (club ? club.name : '') + ' | ' + (club ? club.category : '') + '</div></div></div>' +
       '<span class="status-badge ' + statusInfo.badge + '">' + statusInfo.label + '</span></div>' +
       '<div class="review-card-body"><p class="review-description">' + log.description + '</p>' +
-        '<div class="review-meta"><span class="review-meta-item">' + formatDate(log.date) + '</span>' +
-          '<span class="review-meta-item">' + log.timeIn + ' - ' + log.timeOut + '</span>' +
+        '<div class="review-meta">' +
+          '<span class="review-meta-item">' + formatDate(log.date) + '</span>' +
+          '<span class="review-meta-sep">|</span>' +
+          '<span class="review-meta-item">' + formatTime(log.timeIn) + ' - ' + formatTime(log.timeOut) + '</span>' +
+          '<span class="review-meta-sep">|</span>' +
           '<span class="review-meta-item">' + formatHours(log.duration) + '</span>' +
+          '<span class="review-meta-sep">|</span>' +
           '<span class="review-meta-item">' + log.category + '</span>' +
+          '<span class="review-meta-sep">|</span>' +
           '<span class="review-meta-item">' + getEventLevelInfo(log.eventLevel || 'club-internal').label + '</span></div>' +
         (log.proofUrl ? '<div class="review-proofs"><div class="review-proof-thumb"><span style="font-size:1rem">' + (log.proofType === 'photo' ? 'IMG' : log.proofType === 'github' ? 'CODE' : 'FILE') + '</span></div></div>' : '') + '</div>' +
       (isPending ? '<div class="review-card-footer">' +
