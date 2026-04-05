@@ -1,0 +1,250 @@
+/* ================================================================
+   KredIT — Evaluator Portal Styles
+   ================================================================ */
+
+/* ---- Review Queue ---- */
+.review-queue {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.review-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  transition: all var(--transition-base);
+}
+
+.review-card:hover {
+  border-color: var(--border-default);
+  background: var(--bg-card-hover);
+}
+
+.review-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+}
+
+.review-student {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.review-student .student-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  background: rgba(41, 121, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: var(--color-primary-400);
+  font-size: var(--text-sm);
+}
+
+.review-student .student-name {
+  font-weight: 600;
+  font-size: var(--text-base);
+  color: var(--text-primary);
+}
+
+.review-student .student-meta {
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+  margin-top: 2px;
+}
+
+.review-card-body {
+  margin-bottom: var(--space-4);
+}
+
+.review-description {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: var(--space-3);
+}
+
+.review-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+}
+
+.review-meta-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.review-proofs {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.review-proof-thumb {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.review-proof-thumb:hover {
+  border-color: var(--color-primary-500);
+  transform: scale(1.05);
+}
+
+.review-proof-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.review-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border-subtle);
+  gap: var(--space-3);
+}
+
+.review-rating {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.review-rating label {
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+  font-weight: 500;
+}
+
+.review-actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.review-comment {
+  flex: 1;
+}
+
+.review-comment input {
+  width: 100%;
+  padding: 8px 14px;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+  background: var(--bg-input);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  outline: none;
+}
+
+.review-comment input:focus {
+  border-color: var(--color-primary-500);
+}
+
+/* ---- Student Progress Detail ---- */
+.student-detail-header {
+  display: flex;
+  gap: var(--space-6);
+  margin-bottom: var(--space-6);
+  flex-wrap: wrap;
+}
+
+.student-profile {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex: 1;
+}
+
+.student-profile .profile-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: var(--radius-full);
+  background: var(--gradient-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: var(--text-2xl);
+  color: #fff;
+}
+
+.student-profile .profile-info h2 {
+  font-size: var(--text-xl);
+  margin-bottom: var(--space-1);
+}
+
+.student-profile .profile-details {
+  display: flex;
+  gap: var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--text-tertiary);
+}
+
+.attendance-calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.calendar-day {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.calendar-day.logged {
+  background: rgba(0, 200, 83, 0.2);
+  color: var(--color-success-400);
+}
+
+.calendar-day.missed {
+  background: rgba(255, 23, 68, 0.1);
+  color: var(--color-danger-400);
+}
+
+.calendar-day.today {
+  border: 1px solid var(--color-primary-500);
+  color: var(--color-primary-400);
+}
+
+@media (max-width: 768px) {
+  .review-card-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .review-actions {
+    justify-content: flex-end;
+  }
+}

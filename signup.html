@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - KredIT | KCT</title>
+  <link rel="stylesheet" href="css/design-system.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/auth.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>K</text></svg>">
+</head>
+<body>
+  <div class="bg-auth-mesh"></div>
+  <div class="auth-page">
+    <div class="auth-container animate-scale-in" style="max-width:520px">
+      <div class="auth-form-section" style="flex:1;width:100%">
+        <div class="auth-form-header">
+          <div class="brand-logo" style="margin:0 auto 16px;width:48px;height:48px;font-size:1.4rem">K</div>
+          <h2>Create Student Account</h2>
+          <p>Join KredIT to track your club contributions</p>
+        </div>
+        <form class="auth-form" id="signupForm">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div class="form-group"><label class="form-label" for="signupName">Full Name</label><input type="text" class="form-input" id="signupName" placeholder="Your full name" required></div>
+            <div class="form-group"><label class="form-label" for="signupRoll">Roll Number</label><input type="text" class="form-input" id="signupRoll" placeholder="e.g. 21CSE045" required></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div class="form-group"><label class="form-label" for="signupDept">Department</label>
+              <select class="form-select" id="signupDept" required>
+                <option value="">Select Department</option>
+                <option>Computer Science</option><option>Mechanical Engineering</option><option>Electronics</option>
+                <option>Electrical Engineering</option><option>Civil Engineering</option><option>Information Technology</option>
+                <option>Artificial Intelligence</option><option>Data Science</option><option>Biotechnology</option>
+                <option>Fashion Technology</option><option>Textile Technology</option><option>Design</option>
+                <option>English</option><option>Arts & Humanities</option><option>Management</option>
+              </select>
+            </div>
+            <div class="form-group"><label class="form-label" for="signupYear">Year</label>
+              <select class="form-select" id="signupYear" required>
+                <option value="">Select Year</option><option value="1">1st Year</option><option value="2">2nd Year</option>
+                <option value="3">3rd Year</option><option value="4">4th Year</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group"><label class="form-label" for="signupEmail">Email (@kct.ac.in)</label><input type="email" class="form-input" id="signupEmail" placeholder="your.name@kct.ac.in" required></div>
+          <div class="form-group"><label class="form-label" for="signupPassword">Password</label>
+            <div class="password-toggle"><input type="password" class="form-input" id="signupPassword" placeholder="Minimum 6 characters" required><button type="button" class="toggle-btn">Show</button></div>
+          </div>
+          <div class="form-group"><label class="form-label">Select Your Clubs</label>
+            <div class="club-chips-container" id="clubChipsContainer"></div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg" style="width:100%;margin-top:8px">Create Account</button>
+        </form>
+        <div class="auth-footer">Already have an account? <a href="index.html">Sign In</a></div>
+      </div>
+    </div>
+  </div>
+  <script src="js/clubs-data.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/credit-engine.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

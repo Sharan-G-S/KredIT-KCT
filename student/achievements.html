@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Achievements - KredIT Student Portal</title>
+  <link rel="stylesheet" href="../css/design-system.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/student.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>K</text></svg>">
+</head>
+<body>
+  <div class="bg-gradient-mesh"></div>
+  <div class="app-layout">
+    <div id="sidebarContainer"></div>
+    <main class="main-content">
+      <div class="page-header"><div><h1>Achievements</h1><p class="page-subtitle">Awards earned and certificates</p></div></div>
+      <div class="page-body">
+        <h3 style="font-size:1.1rem;margin-bottom:16px">Earned Awards</h3>
+        <div class="achievement-grid" id="earnedAwards"></div>
+        <h3 style="font-size:1.1rem;margin:32px 0 16px">All Available Awards</h3>
+        <div class="achievement-grid" id="allAwards"></div>
+      </div>
+    </main>
+  </div>
+  <script src="../js/clubs-data.js"></script>
+  <script src="../js/storage.js"></script>
+  <script src="../js/credit-engine.js"></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/student-app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var user = requireAuth(['student']);
+      if (!user) return;
+      document.getElementById('sidebarContainer').innerHTML = buildSidebar('student', 'achievements');
+      renderAchievements(user);
+    });
+  </script>
+</body>
+</html>

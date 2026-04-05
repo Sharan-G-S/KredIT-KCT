@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Log Entry - KredIT Student Portal</title>
+  <link rel="stylesheet" href="../css/design-system.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/student.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>K</text></svg>">
+</head>
+<body>
+  <div class="bg-gradient-mesh"></div>
+  <div class="app-layout">
+    <div id="sidebarContainer"></div>
+    <main class="main-content">
+      <div class="page-header">
+        <div><h1>New Log Entry</h1><p class="page-subtitle">Record your daily club activity with proof of work</p></div>
+      </div>
+      <div class="page-body">
+        <form class="card" id="logEntryForm" style="padding:32px;max-width:800px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px" class="responsive-form-grid">
+            <div class="form-group"><label class="form-label" for="logClub">Club / Team</label>
+              <select class="form-select" id="logClub" required><option value="">Select Club</option></select>
+            </div>
+            <div class="form-group"><label class="form-label" for="logDate">Date</label>
+              <input type="date" class="form-input" id="logDate" required>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:16px;align-items:end" class="responsive-form-grid">
+            <div class="form-group"><label class="form-label" for="logTimeIn">Time In</label>
+              <input type="time" class="form-input" id="logTimeIn" required>
+            </div>
+            <div class="form-group"><label class="form-label" for="logTimeOut">Time Out</label>
+              <input type="time" class="form-input" id="logTimeOut" required>
+            </div>
+            <div class="duration-badge" id="durationDisplay"><div class="duration-label">Duration</div><div class="duration-value">0h</div></div>
+          </div>
+          <div class="form-group"><label class="form-label">Activity Category</label>
+            <div class="category-tags" id="categoryTags"></div>
+          </div>
+          <div class="form-group"><label class="form-label" for="logDescription">Work Description</label>
+            <textarea class="form-textarea" id="logDescription" rows="4" placeholder="Describe what you worked on, what you accomplished, and any challenges faced." required></textarea>
+          </div>
+          <div class="form-group"><label class="form-label">Proof of Work</label>
+            <div class="proof-upload-area">
+              <input type="file" id="proofFileInput" multiple accept="image/*,.pdf,.doc,.docx" style="display:none">
+              <button type="button" class="btn btn-outline" onclick="document.getElementById('proofFileInput').click()">Upload Files</button>
+              <span style="font-size:12px;color:var(--text-muted);margin-left:8px">Photos, reports, certificates (max 5MB each)</span>
+            </div>
+            <div class="proof-preview" id="proofPreview"></div>
+          </div>
+          <div class="form-group"><label class="form-label" for="proofLink">Or Paste Proof Link</label>
+            <input type="url" class="form-input" id="proofLink" placeholder="GitHub URL, Google Drive link, or certificate URL">
+          </div>
+          <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:24px">
+            <a href="my-logs.html" class="btn btn-ghost">Cancel</a>
+            <button type="submit" class="btn btn-primary btn-lg">Submit Log Entry</button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </div>
+  <script src="../js/clubs-data.js"></script>
+  <script src="../js/storage.js"></script>
+  <script src="../js/credit-engine.js"></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/student-app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var user = requireAuth(['student']);
+      if (!user) return;
+      document.getElementById('sidebarContainer').innerHTML = buildSidebar('student', 'log-entry');
+      initLogEntryForm(user);
+    });
+  </script>
+</body>
+</html>

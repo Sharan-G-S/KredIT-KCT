@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Review Logs — KredIT Evaluator Portal</title>
+  <link rel="stylesheet" href="../css/design-system.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/evaluator.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+</head>
+<body>
+  <div class="bg-gradient-mesh"></div>
+  <div class="app-layout">
+    <div id="sidebarContainer"></div>
+    <main class="main-content">
+      <div class="page-header">
+        <div>
+          <h1>📋 Review Student Logs</h1>
+          <p class="page-subtitle">Rate, approve, or request revision on student submissions</p>
+        </div>
+      </div>
+
+      <div class="page-body">
+        <!-- Filters -->
+        <div class="card mb-6" style="padding: 16px 20px;">
+          <div class="flex items-center gap-4 flex-wrap">
+            <div class="tabs" style="border: none; margin: 0;">
+              <button class="tab active" data-filter="pending" onclick="filterReviews('pending', this)">⏳ Pending</button>
+              <button class="tab" data-filter="approved" onclick="filterReviews('approved', this)">✅ Approved</button>
+              <button class="tab" data-filter="all" onclick="filterReviews('all', this)">📋 All</button>
+            </div>
+            <select class="form-select" id="reviewClubFilter" style="width: auto; min-width: 160px; margin-left: auto;">
+              <option value="">All My Clubs</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Review Queue -->
+        <div class="review-queue" id="reviewQueue">
+          <!-- Filled by JS -->
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/clubs-data.js"></script>
+  <script src="../js/storage.js"></script>
+  <script src="../js/credit-engine.js"></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/evaluator-app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = requireAuth(['core_team', 'president', 'faculty_advisor']);
+      if (!user) return;
+      document.getElementById('sidebarContainer').innerHTML = buildSidebar('evaluator', 'review-logs');
+      renderReviewLogs(user);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reports - KredIT Admin Portal</title>
+  <link rel="stylesheet" href="../css/design-system.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/admin.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>K</text></svg>">
+</head>
+<body>
+  <div class="bg-gradient-mesh"></div>
+  <div class="app-layout">
+    <div id="sidebarContainer"></div>
+    <main class="main-content">
+      <div class="page-header"><div><h1>Reports &amp; Export</h1><p class="page-subtitle">Generate reports and export data</p></div></div>
+      <div class="page-body">
+        <div class="card mb-6" style="padding:28px">
+          <h3 style="font-size:1.1rem;margin-bottom:20px">Generate Report</h3>
+          <div style="display:flex;gap:12px;flex-wrap:wrap">
+            <button class="btn btn-primary" onclick="generateReport('semester')">Semester Credit Report</button>
+            <button class="btn btn-outline" onclick="generateReport('club')">Club Performance Report</button>
+            <button class="btn btn-outline" onclick="generateReport('awards')">Awards Shortlist</button>
+          </div>
+        </div>
+        <div class="card mb-6" style="padding:28px;display:none" id="reportOutput">
+          <h3 style="font-size:1.1rem;margin-bottom:16px" id="reportTitle"></h3>
+          <div id="reportContent" class="table-container"></div>
+        </div>
+        <div class="card" style="padding:28px">
+          <h3 style="font-size:1.1rem;margin-bottom:12px">Export Data</h3>
+          <p style="font-size:13px;color:var(--text-tertiary);margin-bottom:16px">Export all logs as a CSV file for external processing.</p>
+          <button class="btn btn-accent" onclick="exportCSV()">Export All Logs (CSV)</button>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="../js/clubs-data.js"></script>
+  <script src="../js/storage.js"></script>
+  <script src="../js/credit-engine.js"></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/admin-app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var user = requireAuth(['admin']);
+      if (!user) return;
+      document.getElementById('sidebarContainer').innerHTML = buildSidebar('admin', 'reports');
+      /* Reports page is ready */
+    });
+  </script>
+</body>
+</html>

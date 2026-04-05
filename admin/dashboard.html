@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - KredIT Admin Portal</title>
+  <link rel="stylesheet" href="../css/design-system.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/admin.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>K</text></svg>">
+</head>
+<body>
+  <div class="bg-gradient-mesh"></div>
+  <div class="app-layout">
+    <div id="sidebarContainer"></div>
+    <main class="main-content">
+      <div class="page-header"><div><h1>Admin Dashboard</h1><p class="page-subtitle">System Overview - KredIT Administration</p></div></div>
+      <div class="page-body">
+        <div class="grid grid-4 gap-4 mb-6 stagger-children" id="adminStats"></div>
+        <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:24px" class="responsive-grid">
+          <div class="card"><h3 style="font-size:1.1rem;margin-bottom:16px">Club Activity Heatmap</h3><div class="heatmap-grid" id="heatmapGrid"></div></div>
+          <div class="card"><h3 style="font-size:1.1rem;margin-bottom:16px">Recent System Activity</h3><div id="systemActivity"></div></div>
+        </div>
+        <div class="card" style="margin-top:24px"><h3 style="font-size:1.1rem;margin-bottom:16px">Credit Distribution by Category</h3><div id="tierSummary"></div></div>
+      </div>
+    </main>
+  </div>
+  <script src="../js/clubs-data.js"></script>
+  <script src="../js/storage.js"></script>
+  <script src="../js/credit-engine.js"></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/admin-app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var user = requireAuth(['admin']);
+      if (!user) return;
+      document.getElementById('sidebarContainer').innerHTML = buildSidebar('admin', 'dashboard');
+      renderAdminDashboard();
+    });
+  </script>
+</body>
+</html>

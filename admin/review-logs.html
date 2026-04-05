@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Review Logs - KredIT Admin Portal</title>
+  <link rel="stylesheet" href="../css/design-system.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/admin.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>K</text></svg>">
+</head>
+<body>
+  <div class="bg-gradient-mesh"></div>
+  <div class="app-layout">
+    <div id="sidebarContainer"></div>
+    <main class="main-content">
+      <div class="page-header"><div><h1>Review Student Logs</h1><p class="page-subtitle">Evaluate and approve submitted activity logs</p></div></div>
+      <div class="page-body">
+        <div class="card mb-6" style="padding:16px 20px">
+          <div class="flex items-center gap-4 flex-wrap">
+            <div class="tabs">
+              <button class="tab active" onclick="filterReviews('pending',this)">Pending</button>
+              <button class="tab" onclick="filterReviews('approved',this)">Approved</button>
+              <button class="tab" onclick="filterReviews('revision',this)">Revision</button>
+              <button class="tab" onclick="filterReviews('rejected',this)">Rejected</button>
+              <button class="tab" onclick="filterReviews('all',this)">All</button>
+            </div>
+            <select class="form-select" id="reviewClubFilter" style="width:auto;min-width:160px"><option value="">All Clubs</option></select>
+          </div>
+        </div>
+        <div id="reviewQueue"></div>
+      </div>
+    </main>
+  </div>
+  <script src="../js/clubs-data.js"></script>
+  <script src="../js/storage.js"></script>
+  <script src="../js/credit-engine.js"></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/admin-app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var user = requireAuth(['admin']);
+      if (!user) return;
+      document.getElementById('sidebarContainer').innerHTML = buildSidebar('admin', 'review-logs');
+      renderReviewLogs();
+    });
+  </script>
+</body>
+</html>

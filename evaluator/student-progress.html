@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Progress — KredIT Evaluator Portal</title>
+  <link rel="stylesheet" href="../css/design-system.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/evaluator.css">
+  <link rel="stylesheet" href="../css/student.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+</head>
+<body>
+  <div class="bg-gradient-mesh"></div>
+  <div class="app-layout">
+    <div id="sidebarContainer"></div>
+    <main class="main-content">
+      <div class="page-header">
+        <div>
+          <h1>📈 Student Progress</h1>
+          <p class="page-subtitle">View detailed progress for students in your clubs</p>
+        </div>
+      </div>
+
+      <div class="page-body">
+        <!-- Student List -->
+        <div class="table-container" id="studentListContainer">
+          <div class="table-header">
+            <h3>Students in Your Clubs</h3>
+            <div class="search-bar" style="width: 240px;">
+              <span class="search-icon">🔍</span>
+              <input type="text" id="studentSearch" placeholder="Search students...">
+            </div>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Student</th>
+                <th>Roll No.</th>
+                <th>Club</th>
+                <th>Hours</th>
+                <th>Proofs</th>
+                <th>Quality</th>
+                <th>Credits</th>
+              </tr>
+            </thead>
+            <tbody id="studentTableBody">
+              <!-- Filled by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/clubs-data.js"></script>
+  <script src="../js/storage.js"></script>
+  <script src="../js/credit-engine.js"></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/evaluator-app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = requireAuth(['core_team', 'president', 'faculty_advisor']);
+      if (!user) return;
+      document.getElementById('sidebarContainer').innerHTML = buildSidebar('evaluator', 'student-progress');
+      renderStudentProgress(user);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Logs - KredIT Student Portal</title>
+  <link rel="stylesheet" href="../css/design-system.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/student.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>K</text></svg>">
+</head>
+<body>
+  <div class="bg-gradient-mesh"></div>
+  <div class="app-layout">
+    <div id="sidebarContainer"></div>
+    <main class="main-content">
+      <div class="page-header">
+        <div><h1>My Logs</h1><p class="page-subtitle">View and track all your submitted daily logs</p></div>
+        <a href="log-entry.html" class="btn btn-primary btn-sm">+ New Entry</a>
+      </div>
+      <div class="page-body">
+        <div class="card mb-6" style="padding:16px 20px">
+          <div class="flex items-center gap-4 flex-wrap">
+            <div class="search-bar" style="flex:1;min-width:200px"><input type="text" id="logsSearch" placeholder="Search logs..."></div>
+            <select class="form-select" id="logsFilterClub" style="width:auto;min-width:160px"><option value="">All Clubs</option></select>
+            <select class="form-select" id="logsFilterStatus" style="width:auto;min-width:160px">
+              <option value="">All Status</option>
+              <option value="approved">Approved</option>
+              <option value="pending">Pending Review</option>
+              <option value="revision">Needs Revision</option>
+              <option value="rejected">Rejected</option>
+            </select>
+          </div>
+        </div>
+        <div class="table-container">
+          <table class="data-table">
+            <thead><tr><th>Date</th><th>Club</th><th>Description</th><th>Duration</th><th>Category</th><th>Status</th><th>Score</th></tr></thead>
+            <tbody id="logsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="../js/clubs-data.js"></script>
+  <script src="../js/storage.js"></script>
+  <script src="../js/credit-engine.js"></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/student-app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var user = requireAuth(['student']);
+      if (!user) return;
+      document.getElementById('sidebarContainer').innerHTML = buildSidebar('student', 'my-logs');
+      renderMyLogs(user);
+    });
+  </script>
+</body>
+</html>

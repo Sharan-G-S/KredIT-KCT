@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Credit Config - KredIT Admin Portal</title>
+  <link rel="stylesheet" href="../css/design-system.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/admin.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>K</text></svg>">
+</head>
+<body>
+  <div class="bg-gradient-mesh"></div>
+  <div class="app-layout">
+    <div id="sidebarContainer"></div>
+    <main class="main-content">
+      <div class="page-header"><div><h1>Credit Configuration</h1><p class="page-subtitle">Manage semester dates, credit thresholds, and evaluation criteria</p></div></div>
+      <div class="page-body">
+        <div class="card mb-6" style="padding:28px">
+          <h3 style="font-size:1.1rem;margin-bottom:20px">Semester Settings</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:500px">
+            <div class="form-group"><label class="form-label" for="semesterStart">Semester Start</label><input type="date" class="form-input" id="semesterStart"></div>
+            <div class="form-group"><label class="form-label" for="semesterEnd">Semester End</label><input type="date" class="form-input" id="semesterEnd"></div>
+          </div>
+          <button class="btn btn-primary" style="margin-top:12px" onclick="saveConfig()">Save Configuration</button>
+        </div>
+        <div class="card mb-6" style="padding:28px">
+          <h3 style="font-size:1.1rem;margin-bottom:20px">Credit Limits</h3>
+          <div id="thresholdConfig"></div>
+        </div>
+        <div class="card" style="padding:28px">
+          <h3 style="font-size:1.1rem;margin-bottom:20px">Evaluation Criteria & Event Multipliers</h3>
+          <div id="tierConfig"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="../js/clubs-data.js"></script>
+  <script src="../js/storage.js"></script>
+  <script src="../js/credit-engine.js"></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/admin-app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var user = requireAuth(['admin']);
+      if (!user) return;
+      document.getElementById('sidebarContainer').innerHTML = buildSidebar('admin', 'credit-config');
+      renderCreditConfig();
+    });
+  </script>
+</body>
+</html>

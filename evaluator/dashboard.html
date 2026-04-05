@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — KredIT Evaluator Portal</title>
+  <link rel="stylesheet" href="../css/design-system.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/evaluator.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+</head>
+<body>
+  <div class="bg-gradient-mesh"></div>
+  <div class="app-layout">
+    <div id="sidebarContainer"></div>
+    <main class="main-content">
+      <div class="page-header">
+        <div>
+          <h1>Evaluator Dashboard</h1>
+          <p class="page-subtitle" id="evalSubtitle">Loading...</p>
+        </div>
+      </div>
+
+      <div class="page-body">
+        <!-- Stats -->
+        <div class="grid grid-4 gap-4 mb-6 stagger-children" id="evalStats"></div>
+
+        <!-- Two Column -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+          <!-- Pending Reviews Preview -->
+          <div class="card">
+            <div class="flex items-center justify-between mb-4">
+              <h3 style="font-size: 1.1rem;">Recent Pending Reviews</h3>
+              <a href="review-logs.html" class="btn btn-ghost btn-sm">View All →</a>
+            </div>
+            <div id="pendingPreview"></div>
+          </div>
+
+          <!-- Club Performance -->
+          <div class="card">
+            <h3 style="font-size: 1.1rem; margin-bottom: 16px;">Your Clubs Overview</h3>
+            <div id="clubsOverview"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/clubs-data.js"></script>
+  <script src="../js/storage.js"></script>
+  <script src="../js/credit-engine.js"></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/evaluator-app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = requireAuth(['core_team', 'president', 'faculty_advisor']);
+      if (!user) return;
+      document.getElementById('sidebarContainer').innerHTML = buildSidebar('evaluator', 'dashboard');
+      renderEvaluatorDashboard(user);
+    });
+  </script>
+</body>
+</html>

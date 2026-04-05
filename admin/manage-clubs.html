@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Clubs - KredIT Admin Portal</title>
+  <link rel="stylesheet" href="../css/design-system.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/admin.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>K</text></svg>">
+</head>
+<body>
+  <div class="bg-gradient-mesh"></div>
+  <div class="app-layout">
+    <div id="sidebarContainer"></div>
+    <main class="main-content">
+      <div class="page-header"><div><h1>Manage Clubs &amp; Teams</h1><p class="page-subtitle">View all clubs, categories, and event levels</p></div></div>
+      <div class="page-body">
+        <div class="tabs mb-6" style="flex-wrap:wrap">
+          <button class="tab active" onclick="filterClubs('all',this)">All Clubs</button>
+          <button class="tab" onclick="filterClubs('technical',this)">Technical</button>
+          <button class="tab" onclick="filterClubs('non-technical',this)">Non-Technical</button>
+          <button class="tab" onclick="filterClubs('international',this)">International</button>
+          <button class="tab" onclick="filterClubs('national',this)">National</button>
+          <button class="tab" onclick="filterClubs('intra-college',this)">Intra-College</button>
+        </div>
+        <div class="club-grid" id="clubGrid"></div>
+      </div>
+    </main>
+  </div>
+  <script src="../js/clubs-data.js"></script>
+  <script src="../js/storage.js"></script>
+  <script src="../js/credit-engine.js"></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/admin-app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var user = requireAuth(['admin']);
+      if (!user) return;
+      document.getElementById('sidebarContainer').innerHTML = buildSidebar('admin', 'manage-clubs');
+      renderManageClubs();
+    });
+  </script>
+</body>
+</html>

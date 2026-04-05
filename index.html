@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="KredIT - Kumaraguru Credit and Recognition Intelligence Tracker. Log in to track your club contributions and earn credits.">
+  <title>KredIT - Login | Kumaraguru College of Technology</title>
+  <link rel="stylesheet" href="css/design-system.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/auth.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>K</text></svg>">
+  <script src="https://alcdn.msauth.net/browser/2.38.0/js/msal-browser.min.js" defer></script>
+</head>
+<body>
+  <div class="bg-auth-mesh"></div>
+  <div class="auth-page">
+    <div class="auth-container animate-scale-in">
+      <div class="auth-banner">
+        <div class="auth-banner-content">
+          <h1>Welcome to<br><span>KredIT</span></h1>
+          <p>Your club contributions - tracked, evaluated, and formally credited. Turn your passion into academic credits.</p>
+          <div class="auth-features">
+            <div class="auth-feature"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div><span>Log activities with proof submission</span></div>
+            <div class="auth-feature"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><span>Admin-verified approval process</span></div>
+            <div class="auth-feature"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><span>Earn up to 25 credits across your degree</span></div>
+            <div class="auth-feature"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg></div><span>Graduate with a Co-Curricular Certificate</span></div>
+          </div>
+          <p class="kct-text">Kumaraguru College of Technology, Coimbatore</p>
+        </div>
+      </div>
+      <div class="auth-form-section">
+        <div class="auth-form-header">
+          <h2>Sign In</h2>
+          <p>Access your KredIT portal with @kct.ac.in</p>
+        </div>
+        <button class="btn btn-microsoft" id="microsoftLoginBtn" style="width:100%">
+          <svg viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="9" height="9" fill="#f25022"/><rect x="11" y="1" width="9" height="9" fill="#7fba00"/><rect x="1" y="11" width="9" height="9" fill="#00a4ef"/><rect x="11" y="11" width="9" height="9" fill="#ffb900"/></svg>
+          Sign in with Microsoft (@kct.ac.in)
+        </button>
+        <div class="auth-divider"><span>or sign in with email</span></div>
+        <form class="auth-form" id="loginForm">
+          <div class="form-group">
+            <label class="form-label" for="loginEmail">Email Address</label>
+            <input type="email" class="form-input" id="loginEmail" placeholder="your.name@kct.ac.in" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="loginPassword">Password</label>
+            <div class="password-toggle">
+              <input type="password" class="form-input" id="loginPassword" placeholder="Enter your password" required>
+              <button type="button" class="toggle-btn">Show</button>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg" style="width:100%;margin-top:8px">Sign In</button>
+        </form>
+        <div class="auth-footer">Don't have an account? <a href="signup.html">Create Account</a></div>
+      </div>
+    </div>
+  </div>
+  <script src="js/clubs-data.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/credit-engine.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>
