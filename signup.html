@@ -15,7 +15,7 @@
     <div class="auth-container animate-scale-in" style="max-width:520px">
       <div class="auth-form-section" style="flex:1;width:100%">
         <div class="auth-form-header">
-          <div class="brand-logo" style="margin:0 auto 16px;width:48px;height:48px;font-size:1.4rem">K</div>
+          <div style="text-align:center;margin-bottom:20px"><span style="font-family:var(--font-display);font-size:2rem;font-weight:800;background:var(--gradient-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent">KredIT</span></div>
           <h2>Create Student Account</h2>
           <p>Join KredIT to track your club contributions</p>
         </div>
@@ -43,8 +43,13 @@
             </div>
           </div>
           <div class="form-group"><label class="form-label" for="signupEmail">Email (@kct.ac.in)</label><input type="email" class="form-input" id="signupEmail" placeholder="your.name@kct.ac.in" required></div>
-          <div class="form-group"><label class="form-label" for="signupPassword">Password</label>
-            <div class="password-toggle"><input type="password" class="form-input" id="signupPassword" placeholder="Minimum 6 characters" required><button type="button" class="toggle-btn">Show</button></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div class="form-group"><label class="form-label" for="signupPassword">Password</label>
+              <div class="password-toggle"><input type="password" class="form-input" id="signupPassword" placeholder="Min 6 characters" required><button type="button" class="toggle-btn">Show</button></div>
+            </div>
+            <div class="form-group"><label class="form-label" for="signupConfirmPassword">Confirm Password</label>
+              <div class="password-toggle"><input type="password" class="form-input" id="signupConfirmPassword" placeholder="Re-type password" required><button type="button" class="toggle-btn">Show</button></div>
+            </div>
           </div>
           <div class="form-group"><label class="form-label">Select Your Clubs</label>
             <div class="club-chips-container" id="clubChipsContainer"></div>
@@ -55,6 +60,7 @@
       </div>
     </div>
   </div>
+  <div style="position:fixed;top:16px;left:50%;transform:translateX(-50%);font-size:13px;color:rgba(255,255,255,0.45);font-family:'Inter',sans-serif;letter-spacing:0.03em;z-index:10;">Kumaraguru College of Technology, Coimbatore</div>
   <script src="js/clubs-data.js"></script>
   <script src="js/storage.js"></script>
   <script src="js/credit-engine.js"></script>

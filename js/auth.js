@@ -136,6 +136,7 @@ function handleSignup(e) {
   var year = parseInt(document.getElementById('signupYear').value);
   var email = document.getElementById('signupEmail').value.trim();
   var password = document.getElementById('signupPassword').value;
+  var confirmPassword = document.getElementById('signupConfirmPassword') ? document.getElementById('signupConfirmPassword').value : password;
   var selectedClubs = [];
   document.querySelectorAll('.club-chip.selected').forEach(function (chip) {
     selectedClubs.push(chip.dataset.clubId);
@@ -148,6 +149,7 @@ function handleSignup(e) {
   if (email.toLowerCase() === 'sharan.admin@kct.ac.in') { showToast('This email is reserved.', 'error'); return; }
   if (selectedClubs.length === 0) { showToast('Please select at least one club.', 'error'); return; }
   if (password.length < 6) { showToast('Password must be at least 6 characters.', 'error'); return; }
+  if (password !== confirmPassword) { showToast('Passwords do not match.', 'error'); return; }
   if (getUserByEmail(email)) { showToast('An account with this email already exists.', 'error'); return; }
 
   var newUser = createUser({ name: name, rollNumber: rollNumber, department: department, year: year, email: email, password: password, role: 'student', clubs: selectedClubs });
