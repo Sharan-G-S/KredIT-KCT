@@ -1,95 +1,159 @@
 /* ================================================================
    KredIT - Credit Calculation Engine
-   ================================================================ */
+   Redesigned: Hour-based accumulation over a full year.
+   Credits grow day by day as approved logs pile up.
+   ================================================================
 
+   CREDIT FORMULA:
+   ─────────────────────────────────────────────────────────────
+   qualityHourScore = Σ (approvedLog.hours × log_quality_0_to_1)
+   adjustedScore    = qualityHourScore × eventMultiplier
+   earnedCredits    = min(3, adjustedScore / TARGET_SCORE × 3)
+
+   TARGET_SCORE = 300  (quality-adjusted hours needed for full 3 credits)
+
+   Example targets over a semester (~26 weeks):
+     6 days/week × 6h average × 90% quality × 1.4x national = 3 credits ✓
+     3 days/week × 3h average × 70% quality × 1.0x local   = ~1.6 credits ✓
+     1 day at any hours                                       = ~0.05–0.2  ✓
+   ─────────────────────────────────────────────────────────────ё */
+
+var CREDIT_TARGET_SCORE = 300; // quality-hour points needed for 3 credits
+
+/* ------------------------------------------------------------------
+   calculateLogScore(log)
+   Returns quality % (0–100) for a single approved log based on
+   admin's per-criteria star ratings.
+------------------------------------------------------------------ */
 function calculateLogScore(log) {
-  const club = getClubById(log.clubId);
+  var club = getClubById(log.clubId);
   if (!club || log.status !== 'approved') return 0;
-  const criteria = getEvaluationCriteria(log.clubId);
-  const multiplier = getEventMultiplier(log.clubId);
-  const evaluation = log.evaluation || {};
+  var criteria = getEvaluationCriteria(log.clubId);
+  var evaluation = log.evaluation || {};
   if (Object.keys(evaluation).length === 0) return 0;
-  let totalWeightedScore = 0;
-  let totalWeight = 0;
-  criteria.forEach(c => {
-    const score = evaluation[c.id];
-    if (score !== undefined && score > 0) {
-      totalWeightedScore += (score / 5) * c.weight;
-      totalWeight += c.weight;
-    }
+
+  var totalWeightedScore = 0;
+  var totalWeight = 0;
+  criteria.forEach(function (c) {
+    var score = evaluation[c.id] || 0;
+    totalWeightedScore += (score / 5) * c.weight;
+    totalWeight += c.weight;
   });
   if (totalWeight === 0) return 0;
-  const baseScore = (totalWeightedScore / totalWeight) * 100;
-  return Math.round(baseScore * multiplier * 10) / 10;
+  return Math.round((totalWeightedScore / totalWeight) * 100); // 0–100
 }
 
+/* ------------------------------------------------------------------
+   calculateStudentCredit(studentId, clubId)
+   Main credit calculator for one student in one club.
+   Returns all progress data used by the UI.
+------------------------------------------------------------------ */
 function calculateStudentCredit(studentId, clubId) {
-  const club = getClubById(clubId);
+  var club = getClubById(clubId);
   if (!club) return null;
-  const logs = getLogsByStudent(studentId).filter(l => l.clubId === clubId);
-  const approvedLogs = logs.filter(l => l.status === 'approved');
-  const totalHours = logs.reduce((s, l) => s + (l.duration || 0), 0);
-  const approvedHours = approvedLogs.reduce((s, l) => s + (l.duration || 0), 0);
-  const logScores = approvedLogs.map(l => calculateLogScore(l));
-  const qualityScore = logScores.length > 0
-    ? Math.round((logScores.reduce((a, b) => a + b, 0) / logScores.length) * 10) / 10 : 0;
-  const contributionPoints = logScores.reduce((a, b) => a + b, 0);
-  const multiplier = getEventMultiplier(clubId);
-  const semesterCredits = calculateSemesterCredits(contributionPoints, qualityScore, multiplier);
-  const eventInfo = getEventLevelInfo(club.eventLevel);
+
+  var allLogs     = getLogsByStudent(studentId).filter(function (l) { return l.clubId === clubId; });
+  var approvedLogs = allLogs.filter(function (l) { return l.status === 'approved'; });
+
+  var totalHours    = allLogs.reduce(function (s, l) { return s + (l.duration || 0); }, 0);
+  var approvedHours = approvedLogs.reduce(function (s, l) { return s + (l.duration || 0); }, 0);
+  var multiplier    = getEventMultiplier(clubId);
+
+  /* Quality scores per log (0.0–1.0) */
+  var logData = approvedLogs.map(function (l) {
+    return {
+      hours:   l.duration || 0,
+      quality: calculateLogScore(l) / 100   // normalise to 0.0–1.0
+    };
+  });
+
+  /* Average quality across all approved logs */
+  var avgQuality = logData.length > 0
+    ? logData.reduce(function (s, d) { return s + d.quality; }, 0) / logData.length
+    : 0;
+
+  /* Core accumulator: Σ(hours × quality) — grows every time a log is approved */
+  var rawQualityHours = logData.reduce(function (s, d) { return s + (d.hours * d.quality); }, 0);
+
+  /* Apply event-level multiplier (international/national clubs earn credits faster) */
+  var adjustedScore = rawQualityHours * multiplier;
+
+  /* Scale to credits: 0 → TARGET → 3 credits (linear, capped at max) */
+  var rawCredits   = (adjustedScore / CREDIT_TARGET_SCORE) * CREDIT_CONFIG.maxPerSemester;
+  var earnedCredits = Math.min(
+    CREDIT_CONFIG.maxPerSemester,
+    Math.floor(rawCredits * 100) / 100     // floor to 2 dp so it never rounds up unfairly
+  );
+
+  var qualityScore    = Math.round(avgQuality * 100);          // 0–100 %
+  var progressPercent = Math.min(100, Math.round((adjustedScore / CREDIT_TARGET_SCORE) * 100));
+
+  var eventInfo = getEventLevelInfo(club.eventLevel);
   return {
-    clubId, clubName: club.name, category: club.category,
-    eventLevel: club.eventLevel, eventLabel: eventInfo.label,
-    eventMultiplier: multiplier, totalHours, approvedHours,
-    totalActivities: logs.length, approvedActivities: approvedLogs.length,
-    qualityScore, contributionPoints: Math.round(contributionPoints),
-    earnedCredits: semesterCredits, maxSemesterCredits: CREDIT_CONFIG.maxPerSemester,
-    pendingLogs: logs.filter(l => l.status === 'pending').length,
-    revisionLogs: logs.filter(l => l.status === 'revision').length,
+    clubId:             clubId,
+    clubName:           club.name,
+    category:           club.category,
+    eventLevel:         club.eventLevel,
+    eventLabel:         eventInfo.label,
+    eventMultiplier:    multiplier,
+    totalHours:         totalHours,
+    approvedHours:      approvedHours,
+    totalActivities:    allLogs.length,
+    approvedActivities: approvedLogs.length,
+    qualityScore:       qualityScore,
+    adjustedScore:      Math.round(adjustedScore * 10) / 10,
+    targetScore:        CREDIT_TARGET_SCORE,
+    progressPercent:    progressPercent,
+    earnedCredits:      earnedCredits,
+    maxSemesterCredits: CREDIT_CONFIG.maxPerSemester,
+    pendingLogs:        allLogs.filter(function (l) { return l.status === 'pending'; }).length,
+    revisionLogs:       allLogs.filter(function (l) { return l.status === 'revision'; }).length,
   };
 }
 
-function calculateSemesterCredits(points, quality, multiplier) {
-  const baseThresholds = [
-    { credits: 0.5, points: 100, quality: 40 },
-    { credits: 1.0, points: 250, quality: 50 },
-    { credits: 1.5, points: 450, quality: 55 },
-    { credits: 2.0, points: 700, quality: 60 },
-    { credits: 2.5, points: 1000, quality: 65 },
-    { credits: 3.0, points: 1400, quality: 70 },
-  ];
-  let earned = 0;
-  for (const t of baseThresholds) {
-    const adjustedPoints = t.points / multiplier;
-    if (points >= adjustedPoints && quality >= t.quality) earned = t.credits;
-  }
-  return Math.min(earned, CREDIT_CONFIG.maxPerSemester);
-}
-
+/* ------------------------------------------------------------------
+   calculateTotalCredits(studentId)
+   Aggregates credits across all clubs (capped at semester/year limits).
+------------------------------------------------------------------ */
 function calculateTotalCredits(studentId) {
-  const user = getUserById(studentId);
+  var user = getUserById(studentId);
   if (!user) return { clubs: [], totalEarned: 0, totalMax: 0, degreeMax: CREDIT_CONFIG.maxDegreeCredits };
-  const clubs = (user.clubs || []).map(clubId => calculateStudentCredit(studentId, clubId)).filter(Boolean);
-  const totalEarned = clubs.reduce((s, c) => s + c.earnedCredits, 0);
-  const maxSem = CREDIT_CONFIG.maxPerYear / 2;
+
+  var clubs = (user.clubs || [])
+    .map(function (clubId) { return calculateStudentCredit(studentId, clubId); })
+    .filter(Boolean);
+
+  var totalEarned = clubs.reduce(function (s, c) { return s + c.earnedCredits; }, 0);
+
+  /* Cap at per-semester max across all clubs */
+  var semMax = CREDIT_CONFIG.maxPerSemester * clubs.length;
+  var yearCap = CREDIT_CONFIG.maxPerYear;
+  totalEarned = Math.min(totalEarned, yearCap);
+
   return {
-    clubs,
-    totalEarned: Math.min(totalEarned, maxSem),
-    totalMax: Math.min(CREDIT_CONFIG.maxPerSemester * clubs.length, maxSem),
-    degreeMax: CREDIT_CONFIG.maxDegreeCredits,
+    clubs:        clubs,
+    totalEarned:  Math.round(totalEarned * 100) / 100,
+    totalMax:     Math.min(semMax, yearCap),
+    degreeMax:    CREDIT_CONFIG.maxDegreeCredits,
   };
 }
 
+/* ------------------------------------------------------------------
+   Awards — based on quality + earned credits thresholds
+------------------------------------------------------------------ */
 function calculateAwards(studentId) {
-  const creditInfo = calculateTotalCredits(studentId);
-  const awards = [];
-  creditInfo.clubs.forEach(club => {
-    if (club.qualityScore >= 90 && club.earnedCredits >= 2.5) {
-      awards.push({ ...AWARD_DEFINITIONS.find(a => a.id === 'gold'), club: club.clubName });
-    } else if (club.qualityScore >= 80 && club.earnedCredits >= 2) {
-      awards.push({ ...AWARD_DEFINITIONS.find(a => a.id === 'silver'), club: club.clubName });
-    } else if (club.qualityScore >= 70 && club.earnedCredits >= 1) {
-      awards.push({ ...AWARD_DEFINITIONS.find(a => a.id === 'bronze'), club: club.clubName });
+  var creditInfo = calculateTotalCredits(studentId);
+  var awards = [];
+  creditInfo.clubs.forEach(function (club) {
+    var gold   = AWARD_DEFINITIONS.find(function (a) { return a.id === 'gold'; });
+    var silver = AWARD_DEFINITIONS.find(function (a) { return a.id === 'silver'; });
+    var bronze = AWARD_DEFINITIONS.find(function (a) { return a.id === 'bronze'; });
+    if (club.qualityScore >= 88 && club.earnedCredits >= 2.5) {
+      if (gold) awards.push(Object.assign({}, gold, { club: club.clubName }));
+    } else if (club.qualityScore >= 75 && club.earnedCredits >= 1.5) {
+      if (silver) awards.push(Object.assign({}, silver, { club: club.clubName }));
+    } else if (club.qualityScore >= 60 && club.earnedCredits >= 0.5) {
+      if (bronze) awards.push(Object.assign({}, bronze, { club: club.clubName }));
     }
   });
   return awards;
@@ -100,19 +164,28 @@ function getCreditProgress(current, target) {
   return Math.min(100, Math.round((current / target) * 100));
 }
 
+/* ------------------------------------------------------------------
+   Certificate generation
+------------------------------------------------------------------ */
 function generateCertificateData(studentId) {
-  const user = getUserById(studentId);
+  var user = getUserById(studentId);
   if (!user) return null;
-  const creditInfo = calculateTotalCredits(studentId);
-  const awards = calculateAwards(studentId);
-  const allLogs = getLogsByStudent(studentId).filter(l => l.status === 'approved');
+  var creditInfo = calculateTotalCredits(studentId);
+  var awards     = calculateAwards(studentId);
+  var allLogs    = getLogsByStudent(studentId).filter(function (l) { return l.status === 'approved'; });
   return {
-    studentName: user.name, rollNumber: user.rollNumber,
-    department: user.department, year: user.year,
-    clubs: creditInfo.clubs.map(c => ({ name: c.clubName, category: c.category, credits: c.earnedCredits, eventLevel: c.eventLabel })),
-    totalCredits: creditInfo.totalEarned, maxCredits: CREDIT_CONFIG.maxDegreeCredits,
+    studentName:     user.name,
+    rollNumber:      user.rollNumber,
+    department:      user.department,
+    year:            user.year,
+    clubs:           creditInfo.clubs.map(function (c) {
+      return { name: c.clubName, category: c.category, credits: c.earnedCredits, eventLevel: c.eventLabel };
+    }),
+    totalCredits:    creditInfo.totalEarned,
+    maxCredits:      CREDIT_CONFIG.maxDegreeCredits,
     totalActivities: allLogs.length,
-    totalHours: Math.round(allLogs.reduce((s, l) => s + (l.duration || 0), 0)),
-    awards, generatedAt: new Date().toISOString(),
+    totalHours:      Math.round(allLogs.reduce(function (s, l) { return s + (l.duration || 0); }, 0)),
+    awards:          awards,
+    generatedAt:     new Date().toISOString(),
   };
 }
