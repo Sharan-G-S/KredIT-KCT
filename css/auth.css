@@ -2,13 +2,62 @@
    KredIT — Authentication Pages
    ================================================================ */
 
+/* ---- Top Header Bar ---- */
+.auth-topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: rgba(10, 14, 39, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  z-index: 50;
+}
+
+.auth-topbar-left {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.03em;
+}
+
+.auth-topbar-right {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-primary-400);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ---- Bottom Credit ---- */
+.auth-bottom-credit {
+  position: fixed;
+  bottom: 12px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.25);
+  font-family: var(--font-body);
+  letter-spacing: 0.04em;
+  z-index: 10;
+}
+
 .auth-page {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: var(--space-8);
+  padding-top: calc(40px + var(--space-8));
 }
+
 
 .auth-container {
   display: flex;
@@ -272,6 +321,32 @@
   background: rgba(41, 121, 255, 0.15);
   border-color: var(--color-primary-500);
   color: var(--color-primary-400);
+}
+
+/* ---- Club Chips Container ---- */
+.club-chips-container {
+  background: var(--bg-input);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.club-chips-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin: 8px 0 6px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--border-subtle);
+  display: block;
+}
+
+.club-chips-label:first-child {
+  margin-top: 0;
 }
 
 @media (max-width: 768px) {
